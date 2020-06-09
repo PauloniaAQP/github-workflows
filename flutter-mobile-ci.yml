@@ -1,7 +1,7 @@
 # This action run tests and builds a flutter application. 
 # Also sends notification to a Telegram chat
 
-name: Flutter CI
+name: Flutter mobile CI
 
 on:
   pull_request:
