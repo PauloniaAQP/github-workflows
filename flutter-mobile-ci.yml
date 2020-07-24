@@ -55,7 +55,7 @@ jobs:
         token: ${{ secrets.TELEGRAM_TOKEN }}
         format: markdown
         message: |
-          ${{ github.actor }} PR-${{ github.event.number }} en *${{ github.event.repository.name }}*
+          *${{ github.actor }}* PR-${{ github.event.number }} en *${{ github.event.repository.name }}*
           
           Ha ocurrido un error durante el build
     - uses: actions/upload-artifact@v1
