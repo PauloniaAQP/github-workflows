@@ -32,7 +32,6 @@ jobs:
           Realizando build...
     - name: Build
       run: |
-        cd e_commerce
         flutter pub get
         flutter test
         flutter build apk --split-per-abi
