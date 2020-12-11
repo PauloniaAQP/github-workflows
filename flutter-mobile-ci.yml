@@ -1,24 +1,18 @@
 # This action run tests and builds a flutter application. 
 # Also sends notification to a Telegram chat
 
-name: Flutter mobile CI
+name: Flutter mobile CI 
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main , sprint]
 
 jobs:
-  build:
+  send_start_notifications:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v1
-      with:
-        java-version: '12.x'
-    - uses: subosito/flutter-action@v1.3.0
-      with:
-          channel: 'stable'
     - name: Send PR notification to Telegram
+      if: github.event.action == 'opened'
       uses: appleboy/telegram-action@master
       with:
         to: ${{ secrets.CHAT_ID }}
@@ -28,8 +22,44 @@ jobs:
           *${{ github.actor }}* PR-${{ github.event.number }} en *${{ github.event.repository.name }}*
           
           Se ha creado un nuevo PR.
-          Pueden revisarlo en [Url del repositorio]${{ github.event.number }}
+          Pueden revisarlo en [Url del repo]${{ github.event.number }}
           Realizando build...
+    - name: Send PR notification to Telegram
+      if: github.event.action == 'synchronize'
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.CHAT_ID }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        format: markdown
+        message: |
+          *${{ github.actor }}* PR-${{ github.event.number }} en *${{ github.event.repository.name }}*
+          
+          Nuevos commits agregados al PR
+          Pueden revisarlo en [Url del repo]${{ github.event.number }}
+          Realizando re-build...
+    - name: Send PR notification to Telegram
+      if: github.event.action == 'reopened'
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.CHAT_ID }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        format: markdown
+        message: |
+          *${{ github.actor }}* PR-${{ github.event.number }} en *${{ github.event.repository.name }}*
+          
+          El PR ha sido re-abierto
+          Pueden revisarlo en [Url del repo]${{ github.event.number }}
+          Realizando re-build...            
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '12.x'
+    - uses: subosito/flutter-action@v1
+      with:
+          channel: 'stable'
     - name: Build
       run: |
         flutter pub get
@@ -62,3 +92,4 @@ jobs:
       with:
         name: APKs
         path: build/app/outputs/apk/release
+    
