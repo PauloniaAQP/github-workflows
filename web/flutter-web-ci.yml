@@ -62,12 +62,6 @@ jobs:
         flutter pub get
         flutter test
         flutter build web
-    #- name: Deploy to Firebase
-    #  uses: w9jds/firebase-action@master
-    #  with:
-    #    args: deploy --only hosting
-    #  env:
-    #    FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}    
     - name: Send artifacts to Telegram
       if: success()
       uses: appleboy/telegram-action@master
