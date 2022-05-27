@@ -60,11 +60,14 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
           channel: 'stable'
+    - name: Checking format
+      run: flutter format -o none --set-exit-if-changed ./lib
+    - name: Getting dependencies
+      run: flutter pub get
+    - name: Tests
+      run: flutter test
     - name: Build
-      run: |
-        flutter pub get
-        flutter test
-        flutter build apk --split-per-abi
+      run: flutter build apk --split-per-abi
     - name: Send artifacts to Telegram
       if: success()
       uses: appleboy/telegram-action@master

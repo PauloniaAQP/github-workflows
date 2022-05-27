@@ -57,6 +57,8 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
           flutter-version: '2.8.0'
+    - name: Checking format
+      run: flutter format -o none --set-exit-if-changed ./lib      
     - name: Getting dependencies
       run: |
         flutter pub get
